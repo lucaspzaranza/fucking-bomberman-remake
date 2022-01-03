@@ -1,22 +1,28 @@
 fileFormatVersion: 2
-guid: c2f168d5cc3371d4ca78c909b99dc6b4
+guid: c1b7e1931bfd78548aee94c16968d751
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8765297898444631108
-    second: terrain_0
+      213: -3637079748148996044
+    second: brick-tileset_0
   - first:
-      213: -5519051278557835307
-    second: terrain_1
+      213: -1105453828843263287
+    second: brick-tileset_1
   - first:
-      213: 2963411684039260603
-    second: terrain_2
+      213: -1955557043479924707
+    second: brick-tileset_2
   - first:
-      213: -4725923292034538642
-    second: terrain_3
+      213: 8215753415466757707
+    second: brick-tileset_3
   - first:
-      213: 8517107447714677574
-    second: terrain_4
+      213: 2025254830532647023
+    second: brick-tileset_4
+  - first:
+      213: -2394048684074116717
+    second: brick-tileset_5
+  - first:
+      213: -8418360472385318168
+    second: brick-tileset_6
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -61,7 +67,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 64
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -118,106 +124,148 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: terrain_0
+      name: brick-tileset_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 768
-        width: 64
-        height: 64
+        y: 32
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 44c25438ff794a970800000000000000
-      internalID: 8765297898444631108
+      spriteID: 438dfc73d3f768dc0800000000000000
+      internalID: -3637079748148996044
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: terrain_1
+      name: brick-tileset_1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9caa3308993a8a0f0800000000000000
+      internalID: -1105453828843263287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: brick-tileset_2
       rect:
         serializedVersion: 2
         x: 64
-        y: 768
-        width: 64
-        height: 64
+        y: 32
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5df05647a146863b0800000000000000
-      internalID: -5519051278557835307
+      spriteID: d10bd5dda377cd4e0800000000000000
+      internalID: -1955557043479924707
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: terrain_2
+      name: brick-tileset_3
       rect:
         serializedVersion: 2
-        x: 128
-        y: 704
-        width: 64
-        height: 64
+        x: 96
+        y: 32
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bb9f66ec937202920800000000000000
-      internalID: 2963411684039260603
+      spriteID: b4e2913d338340270800000000000000
+      internalID: 8215753415466757707
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: terrain_3
+      name: brick-tileset_4
       rect:
         serializedVersion: 2
-        x: 128
-        y: 640
-        width: 64
-        height: 64
+        x: 0
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e63698e0ec52a6eb0800000000000000
-      internalID: -4725923292034538642
+      spriteID: f68da81c9862b1c10800000000000000
+      internalID: 2025254830532647023
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: terrain_4
+      name: brick-tileset_5
       rect:
         serializedVersion: 2
-        x: 192
-        y: 640
-        width: 64
-        height: 64
+        x: 32
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6430ede1918d23670800000000000000
-      internalID: 8517107447714677574
+      spriteID: 39955c2f761a6ced0800000000000000
+      internalID: -2394048684074116717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: brick-tileset_6
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e29844b0c9fb2b80800000000000000
+      internalID: -8418360472385318168
       vertices: []
       indices: 
       edges: []
