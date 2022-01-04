@@ -206,6 +206,135 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &883954086
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1895294806, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: terrainMap
+      value: 
+      objectReference: {fileID: 1732454494}
+    - target: {fileID: 1895294806, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: explosionTile
+      value: 
+      objectReference: {fileID: 11400000, guid: f52744720ea82f248b6504c1c5caee89, type: 2}
+    - target: {fileID: 1895294806, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: timeToDestroyBrick
+      value: 0.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 1895294806, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: _playerData._bombCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 178885765800534668, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 827631043601241562, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1093101960847638451, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1093101960847638451, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1093101960847638451, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1093101960847638451, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1093101960847638451, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1093101960847638451, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1093101960847638451, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1093101960847638451, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1093101960847638451, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1093101960847638451, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1093101960847638451, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609342552182089229, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4258764281718584427, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4514943196005118895, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6066073424790353698, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6992202972832494905, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115348769126543777, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115348769126543777, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_Constraints
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115348769126543777, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_GravityScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115348769126543777, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7390657904669150034, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_Name
+      value: Bomberman 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7390657904669150034, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7887486812221477754, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9006326043845433957, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
 --- !u!1 &1381047281
 GameObject:
   m_ObjectHideFlags: 0
@@ -1847,7 +1976,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1732454492
 Transform:
   m_ObjectHideFlags: 0
@@ -4172,26 +4301,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1895294806, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
-      propertyPath: terrainMap
-      value: 
-      objectReference: {fileID: 1732454494}
-    - target: {fileID: 1895294806, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
-      propertyPath: explosionTile
-      value: 
-      objectReference: {fileID: 11400000, guid: f52744720ea82f248b6504c1c5caee89, type: 2}
-    - target: {fileID: 1895294806, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
-      propertyPath: timeToDestroyBrick
-      value: 0.19
-      objectReference: {fileID: 0}
-    - target: {fileID: 178885765800534668, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 827631043601241562, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1093101960847638451, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -4236,49 +4345,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1609342552182089229, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4258764281718584427, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4514943196005118895, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6066073424790353698, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6992202972832494905, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7115348769126543777, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
-      propertyPath: m_BodyType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7115348769126543777, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
-      propertyPath: m_Constraints
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7115348769126543777, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
-      propertyPath: m_GravityScale
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7115348769126543777, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7390657904669150034, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
       propertyPath: m_Name
       value: Bomberman
-      objectReference: {fileID: 0}
-    - target: {fileID: 7887486812221477754, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}

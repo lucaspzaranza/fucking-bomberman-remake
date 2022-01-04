@@ -21,26 +21,43 @@ public enum Direction
 
 public class Bomberman : MonoBehaviour
 {
+    #region Vars
+
     public float timeToDestroyBrick;
 
     [SerializeField] private float speed;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator anim;
-    [SerializeField] private LayerMask terrainLayerMask;
-    [SerializeField] private Collider2D[] wallhitColliders = null;
+    [SerializeField] private LayerMask blockLayerMask;
+    [SerializeField] private LayerMask bombLayerMask;
+    [SerializeField] private Collider2D[] frontHitColliders = null;
+    [SerializeField] private Collider2D[] bombHitColliders = null;
+    [SerializeField] private GameObject bombPrefab;
+    [SerializeField] private Vector2 overlapPos;
 
     private AnimatorHashes animHashes = new AnimatorHashes();
     private Direction currentDirection = (Direction)1;
-    private Direction previousDirection;
+    private Direction previousDirection = (Direction)0;
 
     private BombermanInput input;
     private InputAction movement;
     private InputAction bomb;
+    private bool enteringBombArea = false;
 
     public AnimatedTile explosionTile;
     public Tilemap terrainMap;
 
-    private bool isLeft;
+    #endregion
+
+    #region Props
+
+    [SerializeField] private PlayerData _playerData;
+    public PlayerData PlayerData => _playerData;
+
+    public Vector2 RoundedPlayerPosition =>
+        new Vector2(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+
+    #endregion
 
     void Awake()
     {
@@ -61,35 +78,45 @@ public class Bomberman : MonoBehaviour
     {
         movement.Disable();
     }
-   
 
     void Update()
     {
         Move();
     }
 
+    //private void PutBomb(CallbackContext context)
+    //{
+    //    int x = Mathf.RoundToInt(transform.position.x);
+
+    //    if (currentDirection == Direction.Left)
+    //        x--;
+    //    else if (currentDirection == Direction.Right)
+    //        x++;
+
+    //    int y = Mathf.RoundToInt(transform.position.y);
+
+    //    if (currentDirection == Direction.Up)
+    //        y++;
+    //    else if (currentDirection == Direction.Down)
+    //        y--;
+
+    //    Vector2 coordinates = new Vector2(x, y);
+
+    //    Vector3Int currentCell = terrainMap.WorldToCell(coordinates);
+
+    //    terrainMap.SetTile(currentCell, explosionTile);
+    //    StartCoroutine(DestroyTile(currentCell));
+    //}
+
     private void PutBomb(CallbackContext context)
     {
-        int x = Mathf.RoundToInt(transform.position.x);
-
-        if (currentDirection == Direction.Left)
-            x--;
-        else if (currentDirection == Direction.Right)
-            x++;
-
-        int y = Mathf.RoundToInt(transform.position.y);
-
-        if (currentDirection == Direction.Up)
-            y++;
-        else if (currentDirection == Direction.Down)
-            y--;
-
-        Vector2 coordinates = new Vector2(x, y);
-
-        Vector3Int currentCell = terrainMap.WorldToCell(coordinates);
-
-        terrainMap.SetTile(currentCell, explosionTile);
-        StartCoroutine(DestroyTile(currentCell));
+        if (PlayerData.BombCount > 0)
+        {
+            Vector2 pos = new Vector2(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+            var newBomb = Instantiate(bombPrefab, pos, Quaternion.identity);
+            Bomb bombScript = newBomb.GetComponent<Bomb>();
+            bombScript.SetPlayerData(PlayerData);
+        }
     }
 
     private IEnumerator DestroyTile(Vector3Int cell)
@@ -108,17 +135,21 @@ public class Bomberman : MonoBehaviour
         if(axisValues != Vector2Int.zero)
         {
             previousDirection = currentDirection;
-            wallhitColliders[(int)previousDirection].gameObject.SetActive(false);
+            frontHitColliders[(int)previousDirection].gameObject.SetActive(false);
+            bombHitColliders[(int)previousDirection].gameObject.SetActive(false);
 
             currentDirection = GetCurrentDirection(axisValues);
-            wallhitColliders[(int)currentDirection].gameObject.SetActive(true);
+            frontHitColliders[(int)currentDirection].gameObject.SetActive(true);
+            bombHitColliders[(int)currentDirection].gameObject.SetActive(true);
         }
 
-        if (!HitWall(currentDirection))
+        if (!HitSomething(currentDirection) && !HitBomb(currentDirection))
         {
             rb.velocity = new Vector2(speed * horizontal, speed * vertical);
             NormalizeOrtogonalAxis(currentDirection);
         }
+        else
+            rb.velocity = Vector2.zero;
 
         SetMovementAnimators(axisValues);
     }
@@ -127,15 +158,19 @@ public class Bomberman : MonoBehaviour
     {
         int dir = (int)currentDir;
         int rounded = 0;
+        float deadzoneX = 0.2f;
+        float deadzoneY = 0.3f;
         if(dir - 2 < 0) // Y Axis, so normalize X Axis
         {
             rounded = Mathf.RoundToInt(transform.position.x);
-            transform.position = new Vector2(rounded, transform.position.y);
+            if(Mathf.Abs(transform.position.x - rounded) <= deadzoneX)
+                transform.position = new Vector2(rounded, transform.position.y);
         }
         else // X Axis, so normalize Y Axis
         {
             rounded = Mathf.RoundToInt(transform.position.y);
-            transform.position = new Vector2(transform.position.x, rounded);
+            if (Mathf.Abs(transform.position.y - rounded) <= deadzoneY)
+                transform.position = new Vector2(transform.position.x, rounded);
         }
     }
 
@@ -163,12 +198,27 @@ public class Bomberman : MonoBehaviour
         return 0f;
     }
 
-    private bool HitWall(Direction currentDirection)
+    private bool HitSomething(Direction currentDirection)
     {
         ContactFilter2D contactFilter = new ContactFilter2D();
         Collider2D[] results = new Collider2D[1];
-        contactFilter.SetLayerMask(terrainLayerMask);
-        wallhitColliders[(int)currentDirection].OverlapCollider(contactFilter, results);
+        contactFilter.useTriggers = true;
+        contactFilter.SetLayerMask(blockLayerMask);
+        frontHitColliders[(int)currentDirection].OverlapCollider(contactFilter, results);
+        //if (results[0] != null)
+        //    print(results[0].gameObject);
+        return results[0] != null;
+    }
+
+    private bool HitBomb(Direction currentDirection)
+    {
+        ContactFilter2D contactFilter = new ContactFilter2D();
+        Collider2D[] results = new Collider2D[1];
+        contactFilter.useTriggers = true;
+        contactFilter.SetLayerMask(bombLayerMask);
+        bombHitColliders[(int)currentDirection].OverlapCollider(contactFilter, results);
+        if (results[0] != null)
+            print(results[0].gameObject);
         return results[0] != null;
     }
 }
