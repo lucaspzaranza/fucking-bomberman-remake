@@ -7,35 +7,42 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class Brick : MonoBehaviour
 {
+    public static Brick instance;
+
     public AnimatedTile explosionTile;
-    public Tilemap terrainMap;
+    public Tilemap brickTilemap;
+    public TilemapCollider2D tilemapCollider;
 
     public Vector2 coordinates;
     public float timeToDestroyBrick;
 
-    private BombermanInput input;
-    private InputAction bomb;
+    private ContactFilter2D contactFilter;
+    private List<Collider2D> colliders = new List<Collider2D>();
 
-    void Awake()
+    private void Awake()
     {
-        input = new BombermanInput();
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
+    }
+    
+    public void DestroyTile(Vector2 brickPos)
+    {
+        Vector3Int currentCell = brickTilemap.WorldToCell(brickPos);
+        brickTilemap.SetTile(currentCell, explosionTile);
+        StartCoroutine(SetTileToNull(currentCell));
     }
 
-    private void OnEnable()
+    public bool HasBrickTile(Vector2 coords)
     {
-        //bomb = input.PlayerControls.Bomb;
-        //bomb.performed += ExplodeTile;
-        //bomb.Enable();
+        Vector3Int currentCell = brickTilemap.WorldToCell(coords);
+        return brickTilemap.HasTile(currentCell);
     }
 
-    private void OnDisable()
+    private IEnumerator SetTileToNull(Vector3Int cell)
     {
-        //bomb.performed -= ExplodeTile;
-        //bomb.Disable();
-    }
-
-    void Update()
-    {
-        
+        yield return new WaitForSeconds(timeToDestroyBrick);
+        brickTilemap.SetTile(cell, null);
     }
 }

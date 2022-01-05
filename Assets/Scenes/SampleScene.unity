@@ -323,7 +323,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7390657904669150034, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7887486812221477754, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
       propertyPath: m_IsActive
@@ -1970,13 +1970,14 @@ GameObject:
   - component: {fileID: 1732454493}
   - component: {fileID: 1732454495}
   - component: {fileID: 1732454496}
-  m_Layer: 3
+  - component: {fileID: 1732454497}
+  m_Layer: 10
   m_Name: Tilemap_Brick_Blocks
-  m_TagString: Untagged
+  m_TagString: Brick
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1732454492
 Transform:
   m_ObjectHideFlags: 0
@@ -2458,16 +2459,6 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: -1, y: -3, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
   - first: {x: 0, y: -3, z: 0}
     second:
       serializedVersion: 2
@@ -2509,16 +2500,6 @@ Tilemap:
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
   - first: {x: 5, y: -2, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: 1, y: -1, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 0
@@ -2620,17 +2601,17 @@ Tilemap:
       m_AllTileFlags: 1073741825
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 57
+  - m_RefCount: 55
     m_Data: {fileID: 11400000, guid: ee1b346e1126a9646b31e9164b8fd859, type: 2}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileSpriteArray:
-  - m_RefCount: 57
+  - m_RefCount: 55
     m_Data: {fileID: -3637079748148996044, guid: c1b7e1931bfd78548aee94c16968d751, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileMatrixArray:
-  - m_RefCount: 57
+  - m_RefCount: 55
     m_Data:
       e00: 1
       e01: 0
@@ -2649,7 +2630,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 57
+  - m_RefCount: 55
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -2688,7 +2669,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionTile: {fileID: 11400000, guid: f52744720ea82f248b6504c1c5caee89, type: 2}
-  terrainMap: {fileID: 1732454494}
+  brickTilemap: {fileID: 1732454494}
+  tilemapCollider: {fileID: 1732454496}
   coordinates: {x: 0, y: -2}
   timeToDestroyBrick: 0.19
 --- !u!19719996 &1732454496
@@ -2707,6 +2689,27 @@ TilemapCollider2D:
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0.00001
+--- !u!50 &1732454497
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1732454491}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
+  m_Constraints: 7
 --- !u!1 &1950604514
 GameObject:
   m_ObjectHideFlags: 0
@@ -4345,9 +4348,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5361201888116152545, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: _playerData._bombForce
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7390657904669150034, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
       propertyPath: m_Name
       value: Bomberman
+      objectReference: {fileID: 0}
+    - target: {fileID: 7390657904669150034, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}

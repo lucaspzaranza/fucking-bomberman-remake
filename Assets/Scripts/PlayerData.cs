@@ -37,7 +37,9 @@ public class PlayerData
     public float Speed => _speed;
 
     public void IncrementBombCount() => _bombCount = Mathf.Clamp(_bombCount + 1, 0, maxBombCount);
+    public void DecrementBombCount() => _bombCount = Mathf.Clamp(_bombCount - 1, 0, maxBombCount);
     public void IncrementLifeCount() => _life = Mathf.Clamp(_life + 1, 0, maxLives);
+    public void DecrementLifeCount() => _life = Mathf.Clamp(_life - 1, 0, maxLives);
     public void SetSpeed(float newSpeed) => _speed = Mathf.Clamp(newSpeed, minSpeed, maxSpeed);
     public void SetBombForce(int newForce) => _bombForce = Mathf.Clamp(newForce, minBombForce, maxBombForce);
 }

@@ -124,7 +124,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1778183458783124518}
   m_Layer: 8
-  m_Name: FrontHitColliders
+  m_Name: WallHitColliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -551,9 +551,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1093101960847638451}
   - component: {fileID: 9100588681641851888}
-  - component: {fileID: 1895294806}
   - component: {fileID: 1317754452}
   - component: {fileID: 7115348769126543777}
+  - component: {fileID: 5361201888116152545}
   m_Layer: 8
   m_Name: Bomberman
   m_TagString: Player
@@ -617,7 +617,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 3794756072765303388, guid: 7cd9fc68a96cdaa499ceeee7907cebf2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -629,48 +629,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1895294806
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7390657904669150034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28d9123e908ef1a418cc082ca9b193e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeToDestroyBrick: 0.19
-  speed: 3
-  rb: {fileID: 7115348769126543777}
-  anim: {fileID: 1317754452}
-  blockLayerMask:
-    serializedVersion: 2
-    m_Bits: 8
-  bombLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  frontHitColliders:
-  - {fileID: 7923147819743683990}
-  - {fileID: 5040774164788979021}
-  - {fileID: 7769093603315256653}
-  - {fileID: 2845848170949872471}
-  bombHitColliders:
-  - {fileID: 5942459516746024962}
-  - {fileID: 6494430161018173140}
-  - {fileID: 8033395797425597228}
-  - {fileID: 2778375123563860855}
-  bombPrefab: {fileID: 3573536026003346849, guid: 3aa7dfc372f6b704aa15702da91656b7, type: 3}
-  overlapPos: {x: 1, y: 1.5}
-  explosionTile: {fileID: 11400000, guid: f52744720ea82f248b6504c1c5caee89, type: 2}
-  terrainMap: {fileID: 0}
-  _playerData:
-    _player: {fileID: 7390657904669150034}
-    _life: 3
-    _bombCount: 1
-    _bombForce: 2
-    _speed: 3
 --- !u!95 &1317754452
 Animator:
   serializedVersion: 3
@@ -711,6 +669,43 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &5361201888116152545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7390657904669150034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28d9123e908ef1a418cc082ca9b193e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 7115348769126543777}
+  anim: {fileID: 1317754452}
+  blockLayerMask:
+    serializedVersion: 2
+    m_Bits: 1032
+  bombLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  wallHitColliders:
+  - {fileID: 7923147819743683990}
+  - {fileID: 5040774164788979021}
+  - {fileID: 7769093603315256653}
+  - {fileID: 2845848170949872471}
+  bombHitColliders:
+  - {fileID: 5942459516746024962}
+  - {fileID: 6494430161018173140}
+  - {fileID: 8033395797425597228}
+  - {fileID: 2778375123563860855}
+  bombPrefab: {fileID: 3573536026003346849, guid: 3aa7dfc372f6b704aa15702da91656b7, type: 3}
+  _playerData:
+    _player: {fileID: 7390657904669150034}
+    _life: 3
+    _bombCount: 1
+    _bombForce: 2
+    _speed: 3
 --- !u!1 &9106854727490098266
 GameObject:
   m_ObjectHideFlags: 0
