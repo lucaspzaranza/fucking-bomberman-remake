@@ -704,7 +704,7 @@ MonoBehaviour:
     _player: {fileID: 7390657904669150034}
     _life: 3
     _bombCount: 1
-    _bombForce: 2
+    _bombForce: 1
     _speed: 3
 --- !u!1 &9106854727490098266
 GameObject:

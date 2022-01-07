@@ -27,7 +27,7 @@ public class PlayerData
     public int BombCount => _bombCount;
 
     [SerializeField]
-    [Range(1, maxBombForce)]
+    [Range(minBombForce, maxBombForce)]
     private int _bombForce;
     public int BombForce => _bombForce;
 
