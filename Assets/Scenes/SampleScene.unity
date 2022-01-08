@@ -226,7 +226,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &626681568
 Transform:
   m_ObjectHideFlags: 0
@@ -4175,7 +4175,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1093101960847638451, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.434
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1093101960847638451, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4219,7 +4219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5361201888116152545, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
       propertyPath: _playerData._bombForce
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7390657904669150034, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
       propertyPath: m_Name
@@ -4228,6 +4228,10 @@ PrefabInstance:
     - target: {fileID: 7390657904669150034, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8509427133301467457, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}

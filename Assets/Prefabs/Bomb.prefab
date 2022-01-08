@@ -235,11 +235,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionBasePrefab: {fileID: 7706392283332766262, guid: c0d9faf0913fa3b49a83611983534a86, type: 3}
+  explosionBeakPrefab: {fileID: 4228134093988938757, guid: 968e220601f711f4ea22a808b6a2150f, type: 3}
   explosionXBodyPrefab: {fileID: 1230634084192841295, guid: 3e231806c2323e2409e0ba7601bee93e, type: 3}
   explosionYBodyPrefab: {fileID: 370726492166517326, guid: 31722129524cdf647ad74500e1d91f19, type: 3}
   positionOffset: 0.5
-  positionMinOffset: 0.035
-  colliderYSize: 0.9
   _bombCollider: {fileID: 2866653525639151160}
   _explosionRaycast: {fileID: 6952211695381214594}
 --- !u!114 &6952211695381214594

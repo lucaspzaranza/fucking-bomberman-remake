@@ -61,7 +61,6 @@ public class ExplosionFire : MonoBehaviour
             if(!isBase)
             {
                 Vector2 coords = GetHitTilePos(direction);
-                print("next: " + coords);
                 Brick.instance.DestroyTile(coords);
             }
             else

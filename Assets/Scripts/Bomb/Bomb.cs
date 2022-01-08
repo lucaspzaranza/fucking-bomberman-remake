@@ -5,13 +5,10 @@ using UnityEngine;
 public class Bomb : MonoBehaviour
 {
     [SerializeField] private GameObject explosionBasePrefab;
+    [SerializeField] private GameObject explosionBeakPrefab;
     [SerializeField] private GameObject explosionXBodyPrefab;
     [SerializeField] private GameObject explosionYBodyPrefab;
-    // Valores antigos: 0.465f e 0.535f;
     [SerializeField] private float positionOffset = 0.5f;
-    [SerializeField] private float positionMinOffset = 0.035f;
-    [SerializeField] private float colliderYSize = 0.9f;
-    //[SerializeField] private Vector2 offsetVector;
 
     private int[] explosionDirectionForces;
 
@@ -38,15 +35,29 @@ public class Bomb : MonoBehaviour
         var baseFire = explosionBaseInstance.GetComponent<ExplosionFire>();
         baseFire.force = PlayerData.BombForce;
 
-        InstantiateExplosionBody(Direction.Up, explosionDirectionForces[0]);
-        InstantiateExplosionBody(Direction.Down, explosionDirectionForces[1]);
-        InstantiateExplosionBody(Direction.Left, explosionDirectionForces[2]);
-        InstantiateExplosionBody(Direction.Right, explosionDirectionForces[3]);
+        for (int i = 0; i < explosionDirectionForces.Length; i++)
+        {
+            int force = explosionDirectionForces[i];
+            Direction direction = (Direction)i;
+            if(force == PlayerData.BombForce) // has beak
+            {
+                if(force > 1)
+                {
+                    var body = InstantiateExplosionBody(direction, force - 1); // minus one since the beak counts as the last index
+                    if (force == PlayerData.BombForce && body != null)
+                        InstantiateExplosionBeak(direction, body.transform.position, force - 1);
+                }
+                else // mini explosion
+                    InstantiateExplosionBeak(direction, explosionBaseInstance.transform.position, force);
+            }
+            else // hasn't beak
+                InstantiateExplosionBody(direction, force);
+        }
     }
 
-    private void InstantiateExplosionBody(Direction direction, int force)
+    private GameObject InstantiateExplosionBody(Direction direction, int force)
     {
-        if (force == 0) return;
+        if (force <= 0) return null;
         var bodyPos = GetExplosionBodyPosition(direction, force);
         GameObject explosionBody;
         if((int)direction < 2)
@@ -69,8 +80,34 @@ public class Bomb : MonoBehaviour
         else
             sr.size = new Vector2(force, 1);
 
-        //var collider = explosionBody.GetComponent<BoxCollider2D>();
-        //collider.size = new Vector2(force, colliderYSize);
+        return explosionBody;
+    }
+
+    private void InstantiateExplosionBeak(Direction direction, Vector2 bodyPos, int force)
+    {
+        Vector2 beakPos = Vector2.zero;
+
+        if((int)direction < 2)
+        {
+            float distance = (direction == Direction.Up)? force + positionOffset : -force - positionOffset;
+            beakPos = new Vector2(bodyPos.x, bodyPos.y + distance);
+        }
+        else
+        {
+            float distance = (direction == Direction.Right) ? force + positionOffset : -force - positionOffset;
+            beakPos = new Vector2(bodyPos.x + distance, bodyPos.y);
+        }
+        Instantiate(explosionBeakPrefab, beakPos, GetBeakRotation(direction));
+    }
+
+    private Quaternion GetBeakRotation(Direction direction)
+    {
+        Quaternion result;
+        if ((int)direction < 2)
+            result = Quaternion.AngleAxis((direction == Direction.Up) ? -270f : 270f, Vector3.forward);
+        else
+            result = new Quaternion(0, (direction == Direction.Right )? 0f : 180f, 0, 0);
+        return result;
     }
 
     private Vector2 GetExplosionBodyPosition(Direction direction, int force)

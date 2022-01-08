@@ -70,10 +70,10 @@ TextureImporter:
     second: exp_beak_down_2
   - first:
       213: -6611490010577821925
-    second: exp_beak_lef_3
+    second: exp_beak_left_2
   - first:
       213: 3700629028062089341
-    second: exp_beak_righ_3
+    second: exp_beak_right_2
   - first:
       213: 4321349126066106873
     second: exp_base_2
@@ -85,10 +85,10 @@ TextureImporter:
     second: exp_beak_down_1
   - first:
       213: 835678513910153455
-    second: exp_beak_le_3
+    second: exp_beak_left_1
   - first:
       213: -2014795597190648048
-    second: exp_beak_rig_3
+    second: exp_beak_right_1
   - first:
       213: 3366174251882233255
     second: exp_base_1
@@ -655,7 +655,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: exp_beak_lef_3
+      name: exp_beak_left_2
       rect:
         serializedVersion: 2
         x: 136
@@ -676,7 +676,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: exp_beak_righ_3
+      name: exp_beak_right_2
       rect:
         serializedVersion: 2
         x: 204
@@ -760,7 +760,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: exp_beak_le_3
+      name: exp_beak_left_1
       rect:
         serializedVersion: 2
         x: 136
@@ -781,7 +781,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: exp_beak_rig_3
+      name: exp_beak_right_1
       rect:
         serializedVersion: 2
         x: 204
