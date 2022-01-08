@@ -4219,7 +4219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5361201888116152545, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
       propertyPath: _playerData._bombForce
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7390657904669150034, guid: 866dda276c21a3d428bbdad2ba3621db, type: 3}
       propertyPath: m_Name

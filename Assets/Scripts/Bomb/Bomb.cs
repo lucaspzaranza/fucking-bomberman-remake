@@ -35,30 +35,35 @@ public class Bomb : MonoBehaviour
         var baseFire = explosionBaseInstance.GetComponent<ExplosionFire>();
         baseFire.force = PlayerData.BombForce;
 
+        GameObject body = null, beak = null;
+
         for (int i = 0; i < explosionDirectionForces.Length; i++)
         {
             int force = explosionDirectionForces[i];
             Direction direction = (Direction)i;
             if(force == PlayerData.BombForce) // has beak
             {
-                if(force > 1)
+                if(force != 1) // not a mini explosion
                 {
-                    var body = InstantiateExplosionBody(direction, force - 1); // minus one since the beak counts as the last index
+                    body = InstantiateExplosionBody(direction, force - 1); // minus one since the beak counts as the last index
                     if (force == PlayerData.BombForce && body != null)
-                        InstantiateExplosionBeak(direction, body.transform.position, force - 1);
+                        beak = InstantiateExplosionBeak(direction, body.transform.position, force);
                 }
-                else // mini explosion
-                    InstantiateExplosionBeak(direction, explosionBaseInstance.transform.position, force);
+                else // it's a mini explosion
+                    beak = InstantiateExplosionBeak(direction, explosionBaseInstance.transform.position, force);
             }
             else // hasn't beak
-                InstantiateExplosionBody(direction, force);
+                body = InstantiateExplosionBody(direction, force);
+
+            body?.transform.SetParent(explosionBaseInstance.transform);
+            beak?.transform.SetParent(explosionBaseInstance.transform);
         }
     }
 
     private GameObject InstantiateExplosionBody(Direction direction, int force)
     {
         if (force <= 0) return null;
-        var bodyPos = GetExplosionBodyPosition(direction, force);
+        var bodyPos = GetExplosionBodyPosition(direction);
         GameObject explosionBody;
         if((int)direction < 2)
             explosionBody = Instantiate(explosionYBodyPrefab, bodyPos, Quaternion.identity);
@@ -80,24 +85,35 @@ public class Bomb : MonoBehaviour
         else
             sr.size = new Vector2(force, 1);
 
+        SharedData.RenameObjectWithDirection(explosionBody, direction);
         return explosionBody;
     }
 
-    private void InstantiateExplosionBeak(Direction direction, Vector2 bodyPos, int force)
+    private GameObject InstantiateExplosionBeak(Direction direction, Vector2 bodyPos, int force)
     {
         Vector2 beakPos = Vector2.zero;
-
-        if((int)direction < 2)
+        if (force != 1)
         {
-            float distance = (direction == Direction.Up)? force + positionOffset : -force - positionOffset;
-            beakPos = new Vector2(bodyPos.x, bodyPos.y + distance);
+            if ((int)direction < 2)
+            {
+                float distance = (direction == Direction.Up) ? force - positionOffset : -force +positionOffset;
+                beakPos = new Vector2(bodyPos.x, bodyPos.y + distance);
+            }
+            else
+            {
+                float distance = (direction == Direction.Right) ? force - positionOffset : -force + positionOffset;
+                beakPos = new Vector2(bodyPos.x + distance, bodyPos.y);
+            }
         }
         else
-        {
-            float distance = (direction == Direction.Right) ? force + positionOffset : -force - positionOffset;
-            beakPos = new Vector2(bodyPos.x + distance, bodyPos.y);
-        }
-        Instantiate(explosionBeakPrefab, beakPos, GetBeakRotation(direction));
+            beakPos = GetMiniExplosionBeakPosition(direction);
+
+        var beak = Instantiate(explosionBeakPrefab, beakPos, GetBeakRotation(direction));
+        beak.GetComponent<ExplosionFire>().direction = direction;
+        //beak.name = beak.name.Replace("(Clone)", $" {direction}");
+        SharedData.RenameObjectWithDirection(beak, direction);
+
+        return beak;
     }
 
     private Quaternion GetBeakRotation(Direction direction)
@@ -110,7 +126,7 @@ public class Bomb : MonoBehaviour
         return result;
     }
 
-    private Vector2 GetExplosionBodyPosition(Direction direction, int force)
+    private Vector2 GetExplosionBodyPosition(Direction direction)
     {
         Vector2 nextTile = SharedData.GetNextTile(transform.position, direction);
         if((int)direction >= 2) // Left and right
@@ -125,6 +141,11 @@ public class Bomb : MonoBehaviour
         }
 
         return nextTile;
+    }
+
+    private Vector2 GetMiniExplosionBeakPosition(Direction direction)
+    {
+        return SharedData.GetNextTile(transform.position, direction);
     }
 
     public void SetPlayerData(PlayerData player)

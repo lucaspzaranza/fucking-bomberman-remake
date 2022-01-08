@@ -10,6 +10,7 @@ public class AnimatorHashes
 
 public static class SharedData
 {
+    private const string cloneString = "(Clone)";
     public static List<Direction> AllDirections => new List<Direction>
     {
         Direction.Up,
@@ -29,5 +30,15 @@ public static class SharedData
             x += (direction == Direction.Right) ? tileDistance : -tileDistance;
 
         return new Vector2(x, y);
+    }
+
+    public static void RenameObjectWithDirection(GameObject obj, Direction direction)
+    {
+        string directionString = $" {direction}";
+
+        if (obj.name.Contains(cloneString))
+            obj.name = obj.name.Replace(cloneString, directionString);
+        else
+            obj.name += directionString;
     }
 }
