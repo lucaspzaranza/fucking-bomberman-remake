@@ -10,8 +10,9 @@ public class Player : Destructible
     #region Vars
 
     private const float cornerMoveSpeed = 5f;
+    private const float cornerMoveOffset = 0.5f;
 
-    [SerializeField] private Vector2 cornerDeadzone;
+    [SerializeField] private float cornerDeadzone = 0.3f;
     [SerializeField] private float cornerOffset = 0.05f;
     [SerializeField] private float stopSmoothCornerDeadzone = 0.1f;
     [SerializeField] private Rigidbody2D rb;
@@ -148,10 +149,7 @@ public class Player : Destructible
     private void SmoothCornerMovement(GameObject hitObj)
     {
         if (Mathf.Abs(Vector2.Distance(transform.position, cornerTarget)) > stopSmoothCornerDeadzone)
-        {
-            print("smooth move");
-            transform.position = Vector2.MoveTowards(transform.position, cornerTarget, cornerMoveSpeed * Time.smoothDeltaTime);
-        }
+            transform.position = Vector2.MoveTowards(transform.position, cornerTarget, (PlayerData.Speed + cornerMoveOffset) * Time.smoothDeltaTime);
         else 
             isMovingCorner = false;
     }
@@ -160,39 +158,39 @@ public class Player : Destructible
     {
         float offset = 0f;
         Vector2 nextTile = SharedData.GetNextCornerPosition(transform.position, hitObj.transform.position, currentDirection);
-        if (currentDirection == Direction.Down || currentDirection == Direction.Left)
-            offset = -cornerOffset;
+
+        // Negative to down/left, positive to up/right directions
+        offset = ((int)currentDirection % 3 != 0)? -cornerOffset : cornerOffset;
+
         if ((int)currentDirection < 2) // Up/Down
             cornerTarget = new Vector2(nextTile.x, transform.position.y + offset);
         else // Left/Right
-            cornerTarget = new Vector2(nextTile.x + offset, transform.position.y);
+            cornerTarget = new Vector2(transform.position.x + offset, nextTile.y);
     }
 
     private void CornerSlopeDetection(Collider2D hit)
     {
-        float diff = 0f;
+        float distance = 0f;
         if((int)currentDirection < 2) // Up/Down, check X Axis
         {
-            diff = transform.position.x - Mathf.RoundToInt(transform.position.x);
-            isMovingCorner = (Mathf.Abs(diff) >= cornerDeadzone.x);
-            if (isMovingCorner)
-            {
-                ironBlock = hit.gameObject;
-                GetCornerDestination(hit.gameObject);
-            }
+            distance = transform.position.x - Mathf.RoundToInt(transform.position.x);
+            MovingCornerSetup(hit, distance);
         }
-        //else if ((int)currentDirection >= 2) // Left/Right, check Y Axis
-        //{
-        //    diff = Mathf.Abs(transform.position.y - Mathf.RoundToInt(transform.position.y));
-        //    //print("y: " + diff);
-        //    if (diff >= cornerDeadzone.y)
-        //    {
-        //        print("move pro outro tile");
-        //        target = new Vector2(transform.position.x, Mathf.RoundToInt(transform.position.y));
-        //        //transform.position = Vector2.MoveTowards(transform.position, target, PlayerData.Speed * Time.deltaTime);
-        //        return true;
-        //    }
-        //}
+        else // Left/Right, check Y Axis
+        {
+            distance = transform.position.y - Mathf.RoundToInt(transform.position.y);            
+            MovingCornerSetup(hit, distance);
+        }
+    }
+
+    private void MovingCornerSetup(Collider2D hit, float distance)
+    {
+        isMovingCorner = (Mathf.Abs(distance) >= cornerDeadzone);
+        if (isMovingCorner)
+        {
+            ironBlock = hit.gameObject;
+            GetCornerDestination(hit.gameObject);
+        }
     }
 
     private Direction GetCurrentDirection(Vector2Int axisValues)
