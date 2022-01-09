@@ -5,9 +5,15 @@ using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 using static UnityEngine.InputSystem.InputAction;
 
-public class Player : MonoBehaviour
+public class Player : Destructible
 {
     #region Vars
+
+    private const float cornerMoveSpeed = 5f;
+
+    [SerializeField] private Vector2 cornerDeadzone;
+    [SerializeField] private float cornerOffset = 0.05f;
+    [SerializeField] private float stopSmoothCornerDeadzone = 0.1f;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator anim;
     [SerializeField] private LayerMask blockLayerMask;
@@ -19,6 +25,9 @@ public class Player : MonoBehaviour
     private AnimatorHashes animHashes = new AnimatorHashes();
     private Direction currentDirection = Direction.Down;
     private Direction previousDirection = 0;
+    private bool isMovingCorner = false;
+    private GameObject ironBlock = null;
+    private Vector2 cornerTarget;
 
     private BombermanInput input;
     private InputAction movement;
@@ -58,7 +67,10 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        Move();
+        if (isMovingCorner)
+            SmoothCornerMovement(ironBlock);
+        else
+            Move();
     }
 
     private void PutBomb(CallbackContext context)
@@ -90,15 +102,19 @@ public class Player : MonoBehaviour
             SetCollidersActivation((int)currentDirection, true);
         }
 
-        bool hitSome = HitSomething(currentDirection);
+        Collider2D hit = HitSomething(currentDirection);
 
-        if (!hitSome && !HitBomb(currentDirection))
+        if (!hit && !HitBomb(currentDirection))
         {
             rb.velocity = new Vector2(speed * horizontal, speed * vertical);
             NormalizeOrtogonalAxis(currentDirection);
         }
-        else // Do the wall slope here
-            rb.velocity = Vector2.zero;
+        else if(!isMovingCorner) // Do the corner slope here
+        {           
+            CornerSlopeDetection(hit);
+            if(!isMovingCorner)
+                rb.velocity = Vector2.zero;
+        }
 
         SetMovementAnimators(axisValues);
     }
@@ -113,8 +129,8 @@ public class Player : MonoBehaviour
     {
         int dir = (int)currentDir;
         int rounded = 0;
-        float deadzoneX = 0.2f; // 0.2f
-        float deadzoneY = 0.3f; // 0.3f
+        float deadzoneX = 0.3f; // 0.3f
+        float deadzoneY = 0.4f; // 0.4f
         if (dir - 2 < 0) // Y Axis, so normalize X Axis
         {
             rounded = Mathf.RoundToInt(transform.position.x);
@@ -127,6 +143,56 @@ public class Player : MonoBehaviour
             if (Mathf.Abs(transform.position.y - rounded) <= deadzoneY)
                 transform.position = new Vector2(transform.position.x, rounded);
         }
+    }
+
+    private void SmoothCornerMovement(GameObject hitObj)
+    {
+        if (Mathf.Abs(Vector2.Distance(transform.position, cornerTarget)) > stopSmoothCornerDeadzone)
+        {
+            print("smooth move");
+            transform.position = Vector2.MoveTowards(transform.position, cornerTarget, cornerMoveSpeed * Time.smoothDeltaTime);
+        }
+        else 
+            isMovingCorner = false;
+    }
+
+    private void GetCornerDestination(GameObject hitObj)
+    {
+        float offset = 0f;
+        Vector2 nextTile = SharedData.GetNextCornerPosition(transform.position, hitObj.transform.position, currentDirection);
+        if (currentDirection == Direction.Down || currentDirection == Direction.Left)
+            offset = -cornerOffset;
+        if ((int)currentDirection < 2) // Up/Down
+            cornerTarget = new Vector2(nextTile.x, transform.position.y + offset);
+        else // Left/Right
+            cornerTarget = new Vector2(nextTile.x + offset, transform.position.y);
+    }
+
+    private void CornerSlopeDetection(Collider2D hit)
+    {
+        float diff = 0f;
+        if((int)currentDirection < 2) // Up/Down, check X Axis
+        {
+            diff = transform.position.x - Mathf.RoundToInt(transform.position.x);
+            isMovingCorner = (Mathf.Abs(diff) >= cornerDeadzone.x);
+            if (isMovingCorner)
+            {
+                ironBlock = hit.gameObject;
+                GetCornerDestination(hit.gameObject);
+            }
+        }
+        //else if ((int)currentDirection >= 2) // Left/Right, check Y Axis
+        //{
+        //    diff = Mathf.Abs(transform.position.y - Mathf.RoundToInt(transform.position.y));
+        //    //print("y: " + diff);
+        //    if (diff >= cornerDeadzone.y)
+        //    {
+        //        print("move pro outro tile");
+        //        target = new Vector2(transform.position.x, Mathf.RoundToInt(transform.position.y));
+        //        //transform.position = Vector2.MoveTowards(transform.position, target, PlayerData.Speed * Time.deltaTime);
+        //        return true;
+        //    }
+        //}
     }
 
     private Direction GetCurrentDirection(Vector2Int axisValues)
@@ -153,14 +219,14 @@ public class Player : MonoBehaviour
         return 0f;
     }
 
-    private bool HitSomething(Direction currentDirection)
+    private Collider2D HitSomething(Direction currentDirection)
     {
         ContactFilter2D contactFilter = new ContactFilter2D();
         Collider2D[] results = new Collider2D[1];
         contactFilter.useTriggers = true;
         contactFilter.SetLayerMask(blockLayerMask);
         wallHitColliders[(int)currentDirection].OverlapCollider(contactFilter, results);
-        return results[0] != null;
+        return results[0];
     }
 
     private bool HitBomb(Direction currentDirection)

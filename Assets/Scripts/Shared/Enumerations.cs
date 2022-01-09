@@ -9,3 +9,10 @@ public enum Direction
     Left = 2,
     Right = 3
 }
+
+public enum ExplosionFireType
+{
+    Base = 0,
+    Body = 1,
+    Beak = 2
+}

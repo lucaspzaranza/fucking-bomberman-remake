@@ -98,8 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6be0b679c19b124489c99e4a2e87b7c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosionType: 1
   force: 0
-  isBase: 0
   contactLayer:
     serializedVersion: 2
     m_Bits: 1856

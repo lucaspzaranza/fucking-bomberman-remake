@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
-using static UnityEngine.InputSystem.InputAction;
 
-public class Brick : MonoBehaviour
+public class Brick : Destructible
 {
     public static Brick instance;
 
@@ -44,5 +43,11 @@ public class Brick : MonoBehaviour
     {
         yield return new WaitForSeconds(timeToDestroyBrick);
         brickTilemap.SetTile(cell, null);
+    }
+
+    public override void ExplosionHit(Vector2 tilePos)
+    {
+        if (instance.HasBrickTile(tilePos))
+            instance.DestroyTile(tilePos);
     }
 }

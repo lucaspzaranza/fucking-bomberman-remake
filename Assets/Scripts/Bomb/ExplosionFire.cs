@@ -4,20 +4,86 @@ using UnityEngine;
 
 public class ExplosionFire : MonoBehaviour
 {
-    // offset 0.52, -0.37
+    private const float offsetValue = 0.1f;
+    private const string brickTag = "Brick";
+
+    public ExplosionFireType explosionType;
     public int force;
-    public bool isBase;
     public LayerMask contactLayer;
     public Direction direction;
     public BoxCollider2D boxCollider;
-    private float offsetValue = 0.1f;
 
     public void SelfDestroy() 
     {
         Destroy(gameObject);
     }
 
-    private Vector2 GetHitTilePos(Direction currentDirection)
+    private void Update()
+    {
+        CollisionDetection();
+    }
+
+    private void CollisionDetection()
+    {
+        if (explosionType == ExplosionFireType.Base)
+            BaseFireCollision();
+        else if (explosionType == ExplosionFireType.Body)
+            BodyFireCollision();
+        else if (explosionType == ExplosionFireType.Beak)
+            BeakFireCollision();
+    }
+
+    private void BaseFireCollision()
+    {
+        Vector2 tilePos = transform.position;
+        Collider2D hit = null;
+
+        hit = Physics2D.OverlapCircle(tilePos, offsetValue, contactLayer); // Overlap only on its own tile
+        if (hit != null)
+            CallExplosionHit(hit, tilePos);
+
+        foreach (var dir in SharedData.AllDirections) // Overlap on the tiles around him
+        {
+            tilePos = GetBaseHitTilePos(dir);
+            hit = Physics2D.OverlapCircle(tilePos, offsetValue, contactLayer);
+
+            if (hit == null) continue;
+
+            CallExplosionHit(hit, tilePos);
+        }
+    }
+
+    private void BodyFireCollision()
+    {
+        Vector2 tilePos = transform.position;
+        Collider2D hit = null;
+
+        hit = Physics2D.OverlapCircle(tilePos, offsetValue, contactLayer); // Overlap on its own tile
+        if (hit != null)
+            CallExplosionHit(hit, tilePos);
+
+        tilePos = GetBodyHitTilePos(direction); // Overlap on the tile in front of him
+        hit = Physics2D.OverlapCircle(tilePos, offsetValue, contactLayer);
+        if (hit != null)
+            CallExplosionHit(hit, tilePos);
+    }
+
+    private void BeakFireCollision()
+    {
+        Vector2 tilePos = transform.position;
+        Collider2D hit = null;
+
+        hit = Physics2D.OverlapCircle(tilePos, offsetValue, contactLayer); // Overlap on its own tile
+        if (hit != null)
+            CallExplosionHit(hit, tilePos);
+    }
+
+    /// <summary>
+    /// Used to detect collision between the explosion body and another tile in front of it.
+    /// </summary>
+    /// <param name="currentDirection">The direction of the body.</param>
+    /// <returns>The tile position.</returns>
+    private Vector2 GetBodyHitTilePos(Direction currentDirection)
     {
         Vector2 offsetPos = transform.position;
         int dirInt = (int)currentDirection;
@@ -32,8 +98,13 @@ public class ExplosionFire : MonoBehaviour
 
         return SharedData.GetNextTile(offsetPos, currentDirection, force);
     }
-    
-    private Vector2 GetBaseExplosionHitTilePos(Direction currentDirection)
+
+    /// <summary>
+    /// Used to detect collision between the explosion base and another tile in front of it or around it.
+    /// </summary>
+    /// <param name="currentDirection">The direction of the body.</param>
+    /// <returns>The tile position.</returns>
+    private Vector2 GetBaseHitTilePos(Direction currentDirection)
     {
         int x = Mathf.RoundToInt(transform.position.x);
 
@@ -54,24 +125,11 @@ public class ExplosionFire : MonoBehaviour
         return coordinates;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void CallExplosionHit(Collider2D hit, Vector2 tilePos)
     {
-        if (other.gameObject.tag == "Brick")
-        {
-            if(!isBase)
-            {
-                Vector2 coords = GetHitTilePos(direction);
-                Brick.instance.DestroyTile(coords);
-            }
-            else
-            {
-                foreach (var dir in SharedData.AllDirections)
-                {
-                    Vector2 coords = GetBaseExplosionHitTilePos(dir);
-                    if (Brick.instance.HasBrickTile(coords))
-                        Brick.instance.DestroyTile(coords);
-                }
-            }
-        }
+        if (hit.tag == brickTag)
+            hit.GetComponent<Destructible>().ExplosionHit(tilePos);
+        else
+            hit.GetComponent<Destructible>().ExplosionHit();
     }
 }

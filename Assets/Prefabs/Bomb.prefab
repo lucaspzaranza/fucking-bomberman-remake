@@ -238,6 +238,7 @@ MonoBehaviour:
   explosionBeakPrefab: {fileID: 4228134093988938757, guid: 968e220601f711f4ea22a808b6a2150f, type: 3}
   explosionXBodyPrefab: {fileID: 1230634084192841295, guid: 3e231806c2323e2409e0ba7601bee93e, type: 3}
   explosionYBodyPrefab: {fileID: 370726492166517326, guid: 31722129524cdf647ad74500e1d91f19, type: 3}
+  timeToExplode: 2.2
   positionOffset: 0.5
   _bombCollider: {fileID: 2866653525639151160}
   _explosionRaycast: {fileID: 6952211695381214594}
@@ -256,7 +257,7 @@ MonoBehaviour:
   bomb: {fileID: 7906398324916218067}
   collisionLayers:
     serializedVersion: 2
-    m_Bits: 1608
+    m_Bits: 1736
   directions: 00000000010000000200000003000000
   raycastTransforms:
   - {fileID: 9157290741215948251}

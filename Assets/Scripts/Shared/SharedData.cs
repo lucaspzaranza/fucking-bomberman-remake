@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class AnimatorHashes
 public static class SharedData
 {
     private const string cloneString = "(Clone)";
+    private const double ceilDeadzone = 0.45f;
     public static List<Direction> AllDirections => new List<Direction>
     {
         Direction.Up,
@@ -30,6 +32,18 @@ public static class SharedData
             x += (direction == Direction.Right) ? tileDistance : -tileDistance;
 
         return new Vector2(x, y);
+    }
+
+    public static Vector2 GetNextCornerPosition(Vector2 pos, Vector2 blockPos, Direction direction)
+    {
+        int roundedX = ((pos.x - blockPos.x) < 0) ? Mathf.FloorToInt(pos.x) : Mathf.CeilToInt(pos.x);
+        int roundedY = ((pos.y - blockPos.y) < 0) ? Mathf.FloorToInt(pos.y) : Mathf.CeilToInt(pos.y);
+        float finalX, finalY;
+
+        finalX = ((int)direction < 2) ? roundedX : pos.x;
+        finalY = ((int)direction >= 2) ? roundedY : pos.y;
+
+        return new Vector2(finalX, finalY);
     }
 
     public static void RenameObjectWithDirection(GameObject obj, Direction direction)

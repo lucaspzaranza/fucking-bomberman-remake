@@ -98,8 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6be0b679c19b124489c99e4a2e87b7c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosionType: 2
   force: 0
-  isBase: 0
   contactLayer:
     serializedVersion: 2
     m_Bits: 1856
@@ -129,7 +129,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.9, y: 0.9}
   m_EdgeRadius: 0
 --- !u!50 &1415622538960514992
 Rigidbody2D:

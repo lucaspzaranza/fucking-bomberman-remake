@@ -2,15 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bomb : MonoBehaviour
+public class Bomb : Destructible
 {
+    #region Vars
+
     [SerializeField] private GameObject explosionBasePrefab;
     [SerializeField] private GameObject explosionBeakPrefab;
     [SerializeField] private GameObject explosionXBodyPrefab;
     [SerializeField] private GameObject explosionYBodyPrefab;
+    [SerializeField] private float timeToExplode = 2f;
     [SerializeField] private float positionOffset = 0.5f;
 
     private int[] explosionDirectionForces;
+
+    #endregion
+
+    #region Props
 
     [SerializeField] private Collider2D _bombCollider;
     public Collider2D BombCollider => _bombCollider;
@@ -20,7 +27,14 @@ public class Bomb : MonoBehaviour
 
     [SerializeField] private ExplosionRaycast _explosionRaycast;
     public ExplosionRaycast ExplosionRaycast => _explosionRaycast;
-   
+
+    #endregion
+
+    private void Start()
+    {
+        Invoke(nameof(InitiateExplosion), timeToExplode);
+    }
+
     public void InitiateExplosion()
     {
         PlayerData?.IncrementBombCount();
@@ -110,7 +124,6 @@ public class Bomb : MonoBehaviour
 
         var beak = Instantiate(explosionBeakPrefab, beakPos, GetBeakRotation(direction));
         beak.GetComponent<ExplosionFire>().direction = direction;
-        //beak.name = beak.name.Replace("(Clone)", $" {direction}");
         SharedData.RenameObjectWithDirection(beak, direction);
 
         return beak;
@@ -152,4 +165,6 @@ public class Bomb : MonoBehaviour
     {
         _playerData = player;
     }
+
+    public override void ExplosionHit() => InitiateExplosion();
 }

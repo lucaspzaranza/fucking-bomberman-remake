@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9146599202334958046}
   - component: {fileID: 7769093603315256653}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67,7 +67,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1876772741559833828}
   - component: {fileID: 5040774164788979021}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +112,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.25, y: 0.01}
+  m_Size: {x: 0.4, y: 0.01}
   m_EdgeRadius: 0
 --- !u!1 &2317139607698360993
 GameObject:
@@ -123,7 +123,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1778183458783124518}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: WallHitColliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,7 +158,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8509427133301467457}
   - component: {fileID: 2778375123563860855}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -215,7 +215,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8502193507904452367}
   - component: {fileID: 8033395797425597228}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -273,7 +273,7 @@ GameObject:
   - component: {fileID: 1331513616650972960}
   - component: {fileID: 2811895764407793678}
   m_Layer: 8
-  m_Name: DamageHitCollider
+  m_Name: BombermanCollider
   m_TagString: DamageHit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -303,7 +303,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -319,7 +319,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1744278335113673147}
   - component: {fileID: 6494430161018173140}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -376,7 +376,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8030148519609781469}
   - component: {fileID: 5942459516746024962}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -432,7 +432,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 356370248889189304}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: BombHitColliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -467,7 +467,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7633427491208244335}
   - component: {fileID: 2845848170949872471}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -654,6 +654,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28d9123e908ef1a418cc082ca9b193e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cornerDeadzone: {x: 0.3, y: 0.42}
+  cornerOffset: 0.1
+  stopSmoothCornerDeadzone: 0.15
   rb: {fileID: 7115348769126543777}
   anim: {fileID: 1317754452}
   blockLayerMask:
@@ -676,8 +679,8 @@ MonoBehaviour:
   _playerData:
     _player: {fileID: 7390657904669150034}
     _life: 3
-    _bombCount: 1
-    _bombForce: 1
+    _bombCount: 2
+    _bombForce: 2
     _speed: 3
 --- !u!1 &9106854727490098266
 GameObject:
@@ -689,7 +692,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3996496571118672494}
   - component: {fileID: 7923147819743683990}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -734,5 +737,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.25, y: 0.01}
+  m_Size: {x: 0.4, y: 0.01}
   m_EdgeRadius: 0
