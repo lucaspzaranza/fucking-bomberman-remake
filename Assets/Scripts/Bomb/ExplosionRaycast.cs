@@ -8,7 +8,7 @@ public class ExplosionRaycast : MonoBehaviour
     public LayerMask collisionLayers;
     public Direction[] directions = null;
     [SerializeField] private Transform[] raycastTransforms;
-    [SerializeField] private Collider2D raycastCollider;
+    //[SerializeField] private Collider2D raycastCollider;
 
     private Dictionary<Direction, Vector2> DirectionsDictionary = new Dictionary<Direction, Vector2>()
     {

@@ -11,25 +11,33 @@ public class Player : Destructible
 
     private const float cornerMoveSpeed = 5f;
     private const float cornerMoveOffset = 0.5f;
+    private const float blinkFrameInterval = 0.025f;
 
-    [SerializeField] private float cornerDeadzone = 0.3f;
+    [SerializeField] private float xCornerDeadzone = 0.2f;
+    [SerializeField] private float yCornerDeadzone = 0.35f;
     [SerializeField] private float cornerOffset = 0.05f;
     [SerializeField] private float stopSmoothCornerDeadzone = 0.1f;
+    [SerializeField] private float blinkDuration;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator anim;
     [SerializeField] private LayerMask blockLayerMask;
+    [SerializeField] private LayerMask blockCornerSlopeLayerMask;
     [SerializeField] private LayerMask bombLayerMask;
     [SerializeField] private Collider2D[] wallHitColliders = null;
     [SerializeField] private Collider2D[] bombHitColliders = null;
     [SerializeField] private GameObject bombPrefab;
+    [SerializeField] private SpriteRenderer playerSR;
 
-    private AnimatorHashes animHashes = new AnimatorHashes();
+    private PlayerAnimatorHashes animHashes = new PlayerAnimatorHashes();
     private Direction currentDirection = Direction.Down;
     private Direction previousDirection = 0;
+    private bool isBlinking = false;
     private bool isMovingCorner = false;
-    private GameObject ironBlock = null;
     private Vector2 cornerTarget;
+    private float blinkIntervalTimeCounter;
+    private float blinkTimeCounter;
 
+    // Input Action
     private BombermanInput input;
     private InputAction movement;
     private InputAction bomb;
@@ -64,14 +72,91 @@ public class Player : Destructible
     private void OnDisable()
     {
         movement.Disable();
+
+        bomb.performed -= PutBomb;
+        bomb.Disable();
+    }
+
+    private void Start()
+    {
+        PlayerData.OnDamageTaken += HandleOnDamageTaken;
+        PlayerData.OnPlayerDied += HandleOnPlayerDied;
+        PlayerData.OnPlayerRespawn += HandleOnPlayerRespawn;
+        PlayerData.OnGameOver += HandleOnGameOver;
     }
 
     void Update()
     {
         if (isMovingCorner)
-            SmoothCornerMovement(ironBlock);
+            SmoothCornerMovement();
         else
             Move();
+    }
+
+    private void FixedUpdate()
+    {
+        if (isBlinking)
+        {
+            blinkIntervalTimeCounter += Time.fixedDeltaTime;
+            blinkTimeCounter += Time.fixedDeltaTime;
+            if (blinkIntervalTimeCounter >= blinkFrameInterval)
+            {
+                Blink();
+                blinkIntervalTimeCounter = 0f;
+            }
+        }
+    }
+
+    private void HandleOnDamageTaken()
+    {
+        isBlinking = true;
+    }
+
+    private void HandleOnPlayerRespawn()
+    {
+        isBlinking = true;
+        Invoke(nameof(ResetPlayerData), 0.5f);
+    }
+
+    private void HandleOnGameOver()
+    {
+        Invoke(nameof(DeactivatePlayer), 0.5f);
+        UIController.instance.GameOver.SetActive(true);
+    }
+
+    private void DeactivatePlayer()
+    {
+        gameObject.SetActive(false);
+    }
+
+    private void HandleOnPlayerDied()
+    {
+        TriggerDieAnimation();
+        PlayerData.DecrementLifeCount();
+    }
+
+    private void TriggerDieAnimation() => anim.SetTrigger(animHashes.Die);
+    private void ResetPlayerData()
+    {
+        PlayerData.IncrementHealth(); // set health = 1
+        transform.position = new Vector2(0, 0);
+        anim.SetTrigger(animHashes.ResetAnimator);
+    }
+
+    public void Blink()
+    {
+        if (blinkTimeCounter < blinkDuration)
+        {
+            float alpha = playerSR.color.a;
+            float transparency = alpha == 1 ? 0f : 1f;
+            playerSR.color = new Color(255f, 255f, 255f, transparency);
+        }
+        else
+        {
+            isBlinking = false;
+            playerSR.color = new Color(255f, 255f, 255f, 1f);
+            blinkTimeCounter = 0f;
+        }
     }
 
     private void PutBomb(CallbackContext context)
@@ -112,7 +197,8 @@ public class Player : Destructible
         }
         else if(!isMovingCorner) // Do the corner slope here
         {           
-            CornerSlopeDetection(hit);
+            if(hit?.gameObject.layer != 12) // EdgeWall Layer
+                CornerSlopeDetection(hit);
             if(!isMovingCorner)
                 rb.velocity = Vector2.zero;
         }
@@ -130,8 +216,8 @@ public class Player : Destructible
     {
         int dir = (int)currentDir;
         int rounded = 0;
-        float deadzoneX = 0.3f; // 0.3f
-        float deadzoneY = 0.4f; // 0.4f
+        float deadzoneX = 0.2f; // 0.3f
+        float deadzoneY = 0.3f; // 0.4f
         if (dir - 2 < 0) // Y Axis, so normalize X Axis
         {
             rounded = Mathf.RoundToInt(transform.position.x);
@@ -146,11 +232,47 @@ public class Player : Destructible
         }
     }
 
-    private void SmoothCornerMovement(GameObject hitObj)
+    private void SmoothCornerMovement()
     {
-        if (Mathf.Abs(Vector2.Distance(transform.position, cornerTarget)) > stopSmoothCornerDeadzone)
-            transform.position = Vector2.MoveTowards(transform.position, cornerTarget, (PlayerData.Speed + cornerMoveOffset) * Time.smoothDeltaTime);
-        else 
+        if ((int)currentDirection < 2) // Up and Down
+            VerticalCornerMovement();
+        else // Left and Right
+            HorizontalCornerMovement();
+            
+        SetMovementAnimators(Vector2Int.RoundToInt(rb.velocity));
+    }
+
+    private void VerticalCornerMovement()
+    {
+        int signal = 1;
+        if (Mathf.Abs(transform.position.x - cornerTarget.x) > stopSmoothCornerDeadzone)
+        {
+            signal = (cornerTarget.x > transform.position.x) ? 1 : -1;
+            rb.velocity = new Vector2(PlayerData.Speed * signal, 0f);
+        }
+        else if (Mathf.Abs(transform.position.y - cornerTarget.y) > stopSmoothCornerDeadzone)
+        {
+            signal = (cornerTarget.y > transform.position.y) ? 1 : -1;
+            rb.velocity = new Vector2(0f, PlayerData.Speed * signal);
+        }
+        else
+            isMovingCorner = false;
+    }
+
+    private void HorizontalCornerMovement()
+    {
+        int signal = 1;
+        if (Mathf.Abs(transform.position.y - cornerTarget.y) > stopSmoothCornerDeadzone)
+        {
+            signal = (cornerTarget.y > transform.position.y) ? 1 : -1;
+            rb.velocity = new Vector2(0f, PlayerData.Speed * signal);
+        }
+        else if (Mathf.Abs(transform.position.x - cornerTarget.x) > stopSmoothCornerDeadzone)
+        {
+            signal = (cornerTarget.x > transform.position.x) ? 1 : -1;
+            rb.velocity = new Vector2(PlayerData.Speed * signal, 0f);
+        }
+        else
             isMovingCorner = false;
     }
 
@@ -158,6 +280,10 @@ public class Player : Destructible
     {
         float offset = 0f;
         Vector2 nextTile = SharedData.GetNextCornerPosition(transform.position, hitObj.transform.position, currentDirection);
+
+        isMovingCorner = CanDoCornerSlope(nextTile);
+        if (!isMovingCorner)
+            return;
 
         // Negative to down/left, positive to up/right directions
         offset = ((int)currentDirection % 3 != 0)? -cornerOffset : cornerOffset;
@@ -168,29 +294,59 @@ public class Player : Destructible
             cornerTarget = new Vector2(transform.position.x + offset, nextTile.y);
     }
 
-    private void CornerSlopeDetection(Collider2D hit)
+    private bool CanDoCornerSlope(Vector2 nextTile)
     {
-        float distance = 0f;
-        if((int)currentDirection < 2) // Up/Down, check X Axis
-        {
-            distance = transform.position.x - Mathf.RoundToInt(transform.position.x);
-            MovingCornerSetup(hit, distance);
-        }
-        else // Left/Right, check Y Axis
-        {
-            distance = transform.position.y - Mathf.RoundToInt(transform.position.y);            
-            MovingCornerSetup(hit, distance);
-        }
+        bool canSlope = !HitSomeToPreventCornerSlope(nextTile);
+        return canSlope;
     }
 
-    private void MovingCornerSetup(Collider2D hit, float distance)
+    private void CornerSlopeDetection(Collider2D hit)
     {
-        isMovingCorner = (Mathf.Abs(distance) >= cornerDeadzone);
-        if (isMovingCorner)
-        {
-            ironBlock = hit.gameObject;
+        if((int)currentDirection < 2) // Up/Down, check X Axis
+            MovingCornerSetup(hit);
+        else // Left/Right, check Y Axis
+            MovingCornerSetup(hit);
+    }
+
+    private void MovingCornerSetup(Collider2D hit)
+    {
+        if (IsInsideSlopArea(transform.position, hit, currentDirection))
             GetCornerDestination(hit.gameObject);
+    }
+
+    private bool IsInsideSlopArea(Vector2 pos, Collider2D hit, Direction dir)
+    {
+        if (hit == null) return false;
+        // The hit block corners positions
+        Vector2 upperLeft = new Vector2(hit.bounds.min.x, hit.bounds.max.y);
+        Vector2 upperRight = hit.bounds.max;
+        Vector2 lowerLeft = hit.bounds.min;
+        Vector2 lowerRight = new Vector2(hit.bounds.max.x, hit.bounds.min.y);
+        Vector2 chosenCorner = Vector2.zero;
+        Vector2 hitPos = hit.transform.position;
+        float distance = 0f;
+        bool result = false;
+
+        if((int)dir < 2) // Up and Down, Y Axis
+        {
+            if (dir == Direction.Up) // Lower corners
+                chosenCorner = (pos.x < hitPos.x) ? lowerLeft : lowerRight;
+            else if (dir == Direction.Down) // Upper corners
+                chosenCorner = (pos.x < hitPos.x) ? upperLeft : upperRight;
+            distance = Mathf.Abs(chosenCorner.x - pos.x);
+            result = distance <= yCornerDeadzone;
         }
+        else // Left And Right, X Axis
+        {
+            if (dir == Direction.Right) // Left corners
+                chosenCorner = (pos.y < hitPos.y) ? lowerLeft : upperLeft;
+            else if (dir == Direction.Left) //Right corners
+                chosenCorner = (pos.y < hitPos.y) ? lowerRight : upperRight;
+            distance = Mathf.Abs(chosenCorner.y - pos.y);
+            result = distance <= xCornerDeadzone;
+        }
+
+        return result;
     }
 
     private Direction GetCurrentDirection(Vector2Int axisValues)
@@ -235,5 +391,17 @@ public class Player : Destructible
         contactFilter.SetLayerMask(bombLayerMask);
         bombHitColliders[(int)currentDirection].OverlapCollider(contactFilter, results);
         return results[0] != null;
+    }
+
+    private bool HitSomeToPreventCornerSlope(Vector2 position)
+    {
+        var hitCollider = Physics2D.OverlapPoint(position, blockCornerSlopeLayerMask);
+        return hitCollider != null;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == "Explosion" && !isBlinking)
+            PlayerData.DecrementHealth();
     }
 }

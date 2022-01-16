@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimatorHashes
+public class PlayerAnimatorHashes
 {
     public readonly int XSpeed = Animator.StringToHash("XSpeed");
     public readonly int YSpeed = Animator.StringToHash("YSpeed");
+    public readonly int Die = Animator.StringToHash("Death");
+    public readonly int ResetAnimator = Animator.StringToHash("ResetAnimator");
 }
 
 public static class SharedData
@@ -36,14 +38,20 @@ public static class SharedData
 
     public static Vector2 GetNextCornerPosition(Vector2 pos, Vector2 blockPos, Direction direction)
     {
-        int roundedX = ((pos.x - blockPos.x) < 0) ? Mathf.FloorToInt(pos.x) : Mathf.CeilToInt(pos.x);
-        int roundedY = ((pos.y - blockPos.y) < 0) ? Mathf.FloorToInt(pos.y) : Mathf.CeilToInt(pos.y);
-        float finalX, finalY;
+        float x = 0f, y = 0f;
 
-        finalX = ((int)direction < 2) ? roundedX : pos.x;
-        finalY = ((int)direction >= 2) ? roundedY : pos.y;
-
-        return new Vector2(finalX, finalY);
+        if((int)direction < 2) // Up and Down, Y Axis
+        {
+            y = blockPos.y;
+            x = (pos.x < blockPos.x) ? blockPos.x - 1 : blockPos.x + 1;
+        }
+        else // Left and right, X Axis
+        {
+            x = blockPos.x;
+            y = (pos.y < blockPos.y) ? blockPos.y - 1 : blockPos.y + 1;
+        }
+        
+        return new Vector2(x, y);
     }
 
     public static void RenameObjectWithDirection(GameObject obj, Direction direction)
@@ -56,3 +64,4 @@ public static class SharedData
             obj.name += directionString;
     }
 }
+

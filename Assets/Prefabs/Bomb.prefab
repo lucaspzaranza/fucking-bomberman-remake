@@ -257,7 +257,7 @@ MonoBehaviour:
   bomb: {fileID: 7906398324916218067}
   collisionLayers:
     serializedVersion: 2
-    m_Bits: 1736
+    m_Bits: 5832
   directions: 00000000010000000200000003000000
   raycastTransforms:
   - {fileID: 9157290741215948251}

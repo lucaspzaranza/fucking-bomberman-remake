@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 804143984983591099}
   m_Layer: 7
   m_Name: Explosion Base
-  m_TagString: Untagged
+  m_TagString: Explosion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -121,7 +121,7 @@ MonoBehaviour:
   force: 0
   contactLayer:
     serializedVersion: 2
-    m_Bits: 1856
+    m_Bits: 5960
   direction: 1
   boxCollider: {fileID: 804143984983591099}
 --- !u!50 &1828057889084205264

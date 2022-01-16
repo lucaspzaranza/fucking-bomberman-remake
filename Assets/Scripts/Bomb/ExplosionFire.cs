@@ -130,6 +130,6 @@ public class ExplosionFire : MonoBehaviour
         if (hit.tag == brickTag)
             hit.GetComponent<Destructible>().ExplosionHit(tilePos);
         else
-            hit.GetComponent<Destructible>().ExplosionHit();
+            hit.GetComponent<Destructible>()?.ExplosionHit();
     }
 }
