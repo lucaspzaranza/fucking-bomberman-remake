@@ -3,24 +3,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAnimatorHashes
+public class AnimatorHashes 
 {
-    public readonly int XSpeed = Animator.StringToHash("XSpeed");
-    public readonly int YSpeed = Animator.StringToHash("YSpeed");
+    public readonly int X = Animator.StringToHash("X");
+    public readonly int Y = Animator.StringToHash("Y");
     public readonly int Die = Animator.StringToHash("Death");
     public readonly int ResetAnimator = Animator.StringToHash("ResetAnimator");
+    public readonly int IdleUpset = Animator.StringToHash("IdleUpset");
 }
 
 public static class SharedData
 {
     private const string cloneString = "(Clone)";
-    private const double ceilDeadzone = 0.45f;
     public static List<Direction> AllDirections => new List<Direction>
     {
         Direction.Up,
         Direction.Down,
         Direction.Left,
         Direction.Right
+    };
+
+    public static List<Vector2> DirectionVectors => new List<Vector2>
+    {
+        Vector2.up,
+        Vector2.down,
+        Vector2.left,
+        Vector2.right,
     };
 
     public static Vector2 GetNextTile(Vector2 pos, Direction direction, int tileDistance = 1)

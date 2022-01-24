@@ -113,7 +113,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8779612876947878843}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -145,4 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemExplosion: {fileID: 4901540249152549276, guid: e26e08a62aa049b4a8d69f437b21d2c1, type: 3}
+  itemCollider: {fileID: 8779612876947878837}
+  itemSR: {fileID: 8779612876947878839}
+  timeToEnableCollider: 0.75
   isSuperForce: 1

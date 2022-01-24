@@ -10,7 +10,7 @@ public class AddSpeed : Item
         if (other.gameObject.layer == 8) // player layer
         {
             var player = other.gameObject.GetComponentInParent<Player>(); // the player collider is in a child object
-            player.PlayerData.SetSpeed(player.PlayerData.Speed + incrementRate);
+            player.SetSpeed(player.Speed + incrementRate);
             Destroy(gameObject);
         }
     }

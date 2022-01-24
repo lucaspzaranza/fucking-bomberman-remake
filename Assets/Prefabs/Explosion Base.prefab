@@ -121,7 +121,7 @@ MonoBehaviour:
   force: 0
   contactLayer:
     serializedVersion: 2
-    m_Bits: 5960
+    m_Bits: 14152
   direction: 1
   boxCollider: {fileID: 804143984983591099}
 --- !u!50 &1828057889084205264

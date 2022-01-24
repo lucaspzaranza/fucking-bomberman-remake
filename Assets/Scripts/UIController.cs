@@ -12,6 +12,8 @@ public class UIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _lifeText;
     [SerializeField] private GameObject _gameOver;
 
+    public GameObject canvas;
+
     public TextMeshProUGUI LifeText => _lifeText;
     public GameObject GameOver => _gameOver;
 

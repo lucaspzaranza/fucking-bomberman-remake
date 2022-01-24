@@ -48,6 +48,7 @@ public class Bomb : Destructible
         var explosionBaseInstance = Instantiate(explosionBasePrefab, transform.position, Quaternion.identity);
         var baseFire = explosionBaseInstance.GetComponent<ExplosionFire>();
         baseFire.force = PlayerData.BombForce;
+        baseFire.playerWhoOwns = PlayerData;
 
         GameObject body = null, beak = null;
 
@@ -59,22 +60,22 @@ public class Bomb : Destructible
             {
                 if(force != 1) // not a mini explosion
                 {
-                    body = InstantiateExplosionBody(direction, force - 1); // minus one since the beak counts as the last index
+                    body = InstantiateExplosionBody(direction, force - 1, baseFire); // minus one since the beak counts as the last index
                     if (force == PlayerData.BombForce && body != null)
-                        beak = InstantiateExplosionBeak(direction, body.transform.position, force);
+                        beak = InstantiateExplosionBeak(direction, body.transform.position, force, baseFire);
                 }
                 else // it's a mini explosion
-                    beak = InstantiateExplosionBeak(direction, explosionBaseInstance.transform.position, force);
+                    beak = InstantiateExplosionBeak(direction, explosionBaseInstance.transform.position, force, baseFire);
             }
             else // hasn't beak
-                body = InstantiateExplosionBody(direction, force);
+                body = InstantiateExplosionBody(direction, force, baseFire);
 
             body?.transform.SetParent(explosionBaseInstance.transform);
             beak?.transform.SetParent(explosionBaseInstance.transform);
         }
     }
 
-    private GameObject InstantiateExplosionBody(Direction direction, int force)
+    private GameObject InstantiateExplosionBody(Direction direction, int force, ExplosionFire explosionBaseFire)
     {
         if (force <= 0) return null;
         var bodyPos = GetExplosionBodyPosition(direction);
@@ -90,6 +91,8 @@ public class Bomb : Destructible
             explosionBody.transform.localScale = new Vector2(explosionBody.transform.localScale.x, -explosionBody.transform.localScale.y);
 
         var bodyFire = explosionBody.GetComponent<ExplosionFire>();
+        bodyFire.explosionBaseFire = explosionBaseFire;
+        bodyFire.playerWhoOwns = PlayerData;
         bodyFire.direction = direction;
         bodyFire.force = force;
 
@@ -103,7 +106,7 @@ public class Bomb : Destructible
         return explosionBody;
     }
 
-    private GameObject InstantiateExplosionBeak(Direction direction, Vector2 bodyPos, int force)
+    private GameObject InstantiateExplosionBeak(Direction direction, Vector2 bodyPos, int force, ExplosionFire explosionBaseFire)
     {
         Vector2 beakPos = Vector2.zero;
         if (force != 1)
@@ -123,7 +126,10 @@ public class Bomb : Destructible
             beakPos = GetMiniExplosionBeakPosition(direction);
 
         var beak = Instantiate(explosionBeakPrefab, beakPos, GetBeakRotation(direction));
-        beak.GetComponent<ExplosionFire>().direction = direction;
+        var beakFire = beak.GetComponent<ExplosionFire>();
+        beakFire.playerWhoOwns = PlayerData;
+        beakFire.direction = direction;
+        beakFire.explosionBaseFire = explosionBaseFire;
         SharedData.RenameObjectWithDirection(beak, direction);
 
         return beak;

@@ -10,25 +10,23 @@ public class PlayerData
     public const int maxBombCount = 8;
     public const int minBombForce = 1;
     public const int maxBombForce = 8;
-    public const float minSpeed = 3f;
-    public const float maxSpeed = 4.5f;
     public const int maxLives = 9;
-    public const int minHealth = 1;
-    public const int maxHealth = 5;
+    public const int minScore = 0;
+    public const int maxScore = 999999;
 
     #endregion
 
     #region Event
 
-    public delegate void DamageTaken();
-    public delegate void PlayerDied();
     public delegate void GameOver();
     public delegate void PlayerRespawn();
+    public delegate void UpdateScore(int newScore);
+    public delegate void UpdateLives(int newLives);
 
-    public event DamageTaken OnDamageTaken;
-    public event PlayerDied OnPlayerDied;
     public event GameOver OnGameOver;
     public event PlayerRespawn OnPlayerRespawn;
+    public event UpdateScore OnPlayerUpdateScore;
+    public event UpdateLives OnPlayerUpdateLives;
 
     #endregion
 
@@ -37,6 +35,10 @@ public class PlayerData
     [SerializeField]
     private GameObject _player;
     public GameObject Player => _player;
+
+    [Range(minScore, maxScore)]
+    [SerializeField] private int _score;
+    public int Score => _score;
 
     [SerializeField]
     [Range(0, maxLives)]
@@ -53,16 +55,6 @@ public class PlayerData
     private int _bombForce;
     public int BombForce => _bombForce;
 
-    [SerializeField]
-    [Range(minHealth, maxHealth)]
-    private int _health;
-    public int Health => _health;
-
-    [SerializeField]
-    [Range(minSpeed, maxSpeed)]
-    private float _speed;
-    public float Speed => _speed;
-
     #endregion
 
     #region Methods
@@ -72,9 +64,15 @@ public class PlayerData
     public void IncrementLifeCount()
     {
         _life = Mathf.Clamp(_life + 1, 0, maxLives);
-        UIController.instance.LifeText.text = _life.ToString();
+        OnPlayerUpdateLives?.Invoke(_life);
     }
-        
+    
+    public void SetScore(int newScore)
+    {
+        _score = newScore;
+        OnPlayerUpdateScore?.Invoke(_score);
+    }
+
     public void DecrementLifeCount()
     {
         _life = Mathf.Clamp(_life - 1, 0, maxLives);
@@ -84,19 +82,8 @@ public class PlayerData
         else
             OnPlayerRespawn?.Invoke();
     }
-    public void IncrementHealth() => _health = Mathf.Clamp(_health + 1, minHealth, maxHealth);
-    public void DecrementHealth()
-    {
-        _health = Mathf.Clamp(_health - 1, 0, maxHealth);
 
-        if (_health <= 0)
-            OnPlayerDied?.Invoke();
-        else
-            OnDamageTaken?.Invoke();
-    }
-
-    // These one are different because sometimes it'll need to set a value bigger than one unit.
-    public void SetSpeed(float newSpeed) => _speed = Mathf.Clamp(newSpeed, minSpeed, maxSpeed);
+    // This one is different because sometimes it'll need to set a value bigger than one unit.
     public void SetBombForce(int newForce) => _bombForce = Mathf.Clamp(newForce, minBombForce, maxBombForce);
 
     #endregion

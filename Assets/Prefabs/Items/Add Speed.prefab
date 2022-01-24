@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 3058811556687011399}
   - component: {fileID: 3058811556687011398}
   - component: {fileID: 3058811556687011392}
-  - component: {fileID: 3058811556687011395}
   - component: {fileID: 3058811556687011394}
   - component: {fileID: 3058811556687011393}
+  - component: {fileID: 3058811556687011395}
   m_Layer: 9
   m_Name: Add Speed
   m_TagString: Item
@@ -105,20 +105,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &3058811556687011395
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3058811556687011397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10acf77e8252d6045aaf0a4a4b514403, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemExplosion: {fileID: 4901540249152549276, guid: e26e08a62aa049b4a8d69f437b21d2c1, type: 3}
-  incrementRate: 0.25
 --- !u!50 &3058811556687011394
 Rigidbody2D:
   serializedVersion: 4
@@ -147,7 +133,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3058811556687011397}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -166,3 +152,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &3058811556687011395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3058811556687011397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10acf77e8252d6045aaf0a4a4b514403, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemExplosion: {fileID: 4901540249152549276, guid: e26e08a62aa049b4a8d69f437b21d2c1, type: 3}
+  itemCollider: {fileID: 3058811556687011393}
+  itemSR: {fileID: 3058811556687011398}
+  timeToEnableCollider: 0.75
+  incrementRate: 0.25

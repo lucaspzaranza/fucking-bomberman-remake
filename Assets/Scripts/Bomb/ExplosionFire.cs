@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ExplosionFire : MonoBehaviour
 {
-    private const float offsetValue = 0.1f;
+    private const float offsetValue = 0.01f;
     private const string brickTag = "Brick";
 
     public ExplosionFireType explosionType;
@@ -12,6 +12,9 @@ public class ExplosionFire : MonoBehaviour
     public LayerMask contactLayer;
     public Direction direction;
     public BoxCollider2D boxCollider;
+    public PlayerData playerWhoOwns;
+    public int enemiesDestroyed = 0; //only used on explosion base
+    public ExplosionFire explosionBaseFire = null;
 
     public void SelfDestroy() 
     {
@@ -21,6 +24,8 @@ public class ExplosionFire : MonoBehaviour
     private void Update()
     {
         CollisionDetection();
+        if (explosionType != ExplosionFireType.Base)
+            enemiesDestroyed = 0;
     }
 
     private void CollisionDetection()

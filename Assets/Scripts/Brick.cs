@@ -13,10 +13,14 @@ public class Brick : Destructible
     public TilemapCollider2D tilemapCollider;
 
     public Vector2 coordinates;
+    public GameObject brickExplosion;
     public float timeToDestroyBrick;
 
     private ContactFilter2D contactFilter;
     private List<Collider2D> colliders = new List<Collider2D>();
+
+    public delegate void BrickDestroyed(Vector2Int brickPosition);
+    public static event BrickDestroyed OnBrickDestroyed;       
 
     private void Awake()
     {
@@ -29,20 +33,15 @@ public class Brick : Destructible
     public void DestroyTile(Vector2 brickPos)
     {
         Vector3Int currentCell = brickTilemap.WorldToCell(brickPos);
-        brickTilemap.SetTile(currentCell, explosionTile);
-        StartCoroutine(SetTileToNull(currentCell));
+        brickTilemap.SetTile(currentCell, null);
+        Instantiate(brickExplosion, brickPos, Quaternion.identity); 
+        OnBrickDestroyed?.Invoke(Vector2Int.RoundToInt(brickPos));
     }
 
     public bool HasBrickTile(Vector2 coords)
     {
         Vector3Int currentCell = brickTilemap.WorldToCell(coords);
         return brickTilemap.HasTile(currentCell);
-    }
-
-    private IEnumerator SetTileToNull(Vector3Int cell)
-    {
-        yield return new WaitForSeconds(timeToDestroyBrick);
-        brickTilemap.SetTile(cell, null);
     }
 
     public override void ExplosionHit(Vector2 tilePos)
