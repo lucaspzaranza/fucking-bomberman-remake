@@ -13,7 +13,7 @@ public class ExplosionFire : MonoBehaviour
     public Direction direction;
     public BoxCollider2D boxCollider;
     public PlayerData playerWhoOwns;
-    public int enemiesDestroyed = 0; //only used on explosion base
+    public List<GameObject> enemiesDestroyed = new List<GameObject>();
     public ExplosionFire explosionBaseFire = null;
 
     public void SelfDestroy() 
@@ -24,8 +24,6 @@ public class ExplosionFire : MonoBehaviour
     private void Update()
     {
         CollisionDetection();
-        if (explosionType != ExplosionFireType.Base)
-            enemiesDestroyed = 0;
     }
 
     private void CollisionDetection()

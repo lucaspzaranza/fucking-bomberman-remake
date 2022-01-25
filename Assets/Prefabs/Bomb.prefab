@@ -264,7 +264,6 @@ MonoBehaviour:
   - {fileID: 1234657800986565350}
   - {fileID: 5939017912093546319}
   - {fileID: 7662514871825946472}
-  raycastCollider: {fileID: 2866653525639151160}
 --- !u!61 &2866653525639151160
 BoxCollider2D:
   m_ObjectHideFlags: 0

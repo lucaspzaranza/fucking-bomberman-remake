@@ -77,8 +77,8 @@ public class Enemy : Character
             rb.velocity = movement;
         else if (!isMovingCorner) // Do the corner slope here
         {
-            //if (hit?.gameObject.layer != 12) // EdgeWall Layer
-            //    CornerSlopeDetection(hit);
+            if (hit?.gameObject.layer != 12) // EdgeWall Layer
+                CornerSlopeDetection(hit);
             if (!isMovingCorner)
                 rb.velocity = Vector2.zero;
         }
@@ -123,15 +123,19 @@ public class Enemy : Character
     public virtual void GetScore(GameObject explosion)
     {
         var explosionFire = explosion.GetComponent<ExplosionFire>();
-        explosionFire.explosionBaseFire.enemiesDestroyed++;
-        int multipliedScore = Score * explosionFire.explosionBaseFire.enemiesDestroyed;
-        int newScore = explosionFire.playerWhoOwns.Score + multipliedScore;
-        explosionFire.playerWhoOwns.SetScore(newScore);
-        var scoreTextInstance = Instantiate(scoreText, transform.position, Quaternion.identity, UIController.instance.canvas.transform);
-        var textMesh = scoreTextInstance.GetComponent<TextMeshProUGUI>();
+        if (explosionFire.explosionBaseFire != null &&
+            !explosionFire.explosionBaseFire.enemiesDestroyed.Contains(gameObject)) 
+        {
+            explosionFire.explosionBaseFire.enemiesDestroyed.Add(gameObject);
+            int multipliedScore = Score * explosionFire.explosionBaseFire.enemiesDestroyed.Count;
+            int newScore = explosionFire.playerWhoOwns.Score + multipliedScore;
+            explosionFire.playerWhoOwns.SetScore(newScore);
+            var scoreTextInstance = Instantiate(scoreText, transform.position, Quaternion.identity, UIController.instance.canvas.transform);
+            var textMesh = scoreTextInstance.GetComponent<TextMeshProUGUI>();
         
-        textMesh.text = multipliedScore.ToString();
-        Destroy(gameObject);
+            textMesh.text = multipliedScore.ToString();
+            Destroy(gameObject);
+        }
     }
 
     public virtual bool FoundPlayer()
@@ -177,9 +181,6 @@ public class Enemy : Character
     {
         if (other.tag == "Explosion" && !isBlinking)
         {
-            print("matou o inimigo: " + other.gameObject);
-            print("matou o inimigo: " + other.gameObject);
-            enemyCollider.enabled = false;
             whoHitMe = other.gameObject;
             DecrementHealth();
         }

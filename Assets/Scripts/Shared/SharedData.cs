@@ -62,6 +62,24 @@ public static class SharedData
         return new Vector2(x, y);
     }
 
+    public static Vector2 GetAdjacentCornerTilePosition(Vector2 pos, Vector2 blockPos, Direction direction)
+    {
+        float x = 0f, y = 0f;
+
+        if ((int)direction < 2) // Up and Down, Y Axis
+        {
+            y = blockPos.y + ((direction == Direction.Down)? 1 : -1);
+            x = (pos.x < blockPos.x) ? blockPos.x - 1 : blockPos.x + 1; 
+        }
+        else // Left and right, X Axis
+        {
+            x = blockPos.x + ((direction == Direction.Left)? 1 : -1);
+            y = (pos.y < blockPos.y) ? blockPos.y - 1 : blockPos.y + 1;
+        }
+
+        return new Vector2(x, y);
+    }
+
     public static void RenameObjectWithDirection(GameObject obj, Direction direction)
     {
         string directionString = $" {direction}";

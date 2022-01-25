@@ -12,7 +12,7 @@ public class Character : MonoBehaviour
     protected const float cornerMoveSpeed = 5f;
     protected const float cornerMoveOffset = 0.5f;
     protected const float minSpeed = 1f;
-    protected const float maxSpeed = 4.5f;
+    protected const float maxSpeed = 4f;
 
     #endregion
 
@@ -50,13 +50,14 @@ public class Character : MonoBehaviour
     protected float blinkIntervalTimeCounter;
     protected float blinkTimeCounter;
     protected Vector2 cornerTarget;
+    protected Vector2 adjacentCornerTileTarget;
     
     protected bool isMovingCorner = false;
 
     #endregion
 
     #region Props
-
+    [Header("Character General Data")]
     [Range(minHealth, maxHealth)]
     [SerializeField] protected int _health;
     public int Health => _health;
@@ -161,10 +162,14 @@ public class Character : MonoBehaviour
     {
         float offset = 0f;
         Vector2 nextTile = SharedData.GetNextCornerPosition(transform.position, hitObj.transform.position, currentDirection);
+        adjacentCornerTileTarget = SharedData.GetAdjacentCornerTilePosition(transform.position, hitObj.transform.position, currentDirection);
 
         isMovingCorner = CanDoCornerSlope(nextTile);
-        if (!isMovingCorner)
-            return;
+        if (!isMovingCorner) return;
+        else
+            isMovingCorner &= CanDoCornerSlope(adjacentCornerTileTarget);
+
+        if (!isMovingCorner) return;
 
         // Negative to down/left, positive to up/right directions
         offset = ((int)currentDirection % 3 != 0) ? -cornerOffset : cornerOffset;
